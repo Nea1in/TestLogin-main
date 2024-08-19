@@ -23,7 +23,7 @@ public class TestLogin {
     @BeforeEach
     public void setUp() {
 
-        String browser = System.getProperty("browser", "edge");
+        String browser = System.getProperty("browser", "chrome");
         if (browser.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
 
