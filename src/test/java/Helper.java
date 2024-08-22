@@ -1,6 +1,7 @@
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 public class Helper {
@@ -15,11 +16,17 @@ public class Helper {
         element.sendKeys(Keys.CONTROL + "a");
         element.sendKeys(Keys.DELETE);
         } catch (NoSuchElementException e) {
-            logger.error("Element not found: " + locator + " - " + e.getMessage());
+            String errorMsg = "Element not found: " + locator + " - " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         } catch (ElementNotInteractableException e) {
-            logger.error("Element not interactable: " + locator + " - " + e.getMessage());
+            String errorMsg = "Element not interactable: " + locator + " - " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         } catch (Exception e) {
-            logger.error("Unexpected error during filling input: " + e.getMessage());
+            String errorMsg = "Unexpected error during filling input: " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         }
     }
 
@@ -31,11 +38,17 @@ public class Helper {
         WebElement element = driver.findElement(By.xpath(locator));
         element.sendKeys(text);
         } catch (NoSuchElementException e) {
-            logger.error("Element not found: " + locator + " - " + e.getMessage());
+            String errorMsg = "Element not found: " + locator + " - " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         } catch (ElementNotInteractableException e) {
-            logger.error("Element not interactable: " + locator + " - " + e.getMessage());
+            String errorMsg = "Element not interactable: " + locator + " - " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         } catch (Exception e) {
-            logger.error("Unexpected error during filling input: " + e.getMessage());
+            String errorMsg = "Unexpected error during filling input: " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         }
     }
     public static void clickButtonByLocator(WebDriver driver, String locator, String message ){
@@ -46,29 +59,51 @@ public class Helper {
         WebElement button = driver.findElement(By.xpath(locator));
         button.click();
         } catch (NoSuchElementException e) {
-            logger.error("Element not found: " + locator + " - " + e.getMessage());
+            String errorMsg = "Element not found: " + locator + " - " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         } catch (ElementNotInteractableException e) {
-            logger.error("Element not interactable: " + locator + " - " + e.getMessage());
+            String errorMsg = "Element not interactable: " + locator + " - " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         } catch (Exception e) {
-            logger.error("Unexpected error during filling input: " + e.getMessage());
+            String errorMsg = "Unexpected error during filling input: " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         }
     }
 
     public static String validateMessageByLocator(WebDriver driver,String locator, String message ){
-        String errorMessageText = null;
+        String errorMessageText;
         try {
         WebElement elementMessage = driver.findElement(By.xpath(locator));
         errorMessageText = elementMessage.getText();
         } catch (NoSuchElementException e) {
-            logger.error("Element not found: " + locator + " - " + e.getMessage());
+            String errorMsg = "Element not found: " + locator + " - " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         } catch (ElementNotInteractableException e) {
-            logger.error("Element not interactable: " + locator + " - " + e.getMessage());
+            String errorMsg = "Element not interactable: " + locator + " - " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         } catch (Exception e) {
-            logger.error("Unexpected error during filling input: " + e.getMessage());
+            String errorMsg = "Unexpected error during filling input: " + e.getMessage();
+            logger.error(errorMsg);
+            throw new TestExecutionException(errorMsg, e);
         }
         if(message != null ) {
             logger.info("Error message text: " + errorMessageText);
         }
         return errorMessageText;
+    }
+
+    public static void waitForUrlAndTitle(WebDriverWait wait, WebDriver driver) {
+        wait.until(d -> {
+            String currentUrl = driver.getCurrentUrl();
+            Helper.logger.info("Redirect to inventory page, current URL: " + currentUrl);
+            String pageTitle = driver.getTitle();
+            Helper.logger.info("Expected title Swag Labs, current title: " + pageTitle);
+            return true;
+        });
     }
 }

@@ -32,16 +32,17 @@ public class TestLogin {
 
     @BeforeEach
     public void setUp() {
-
-        String browser = System.getProperty("browser", "chrome");
-        if (browser.equalsIgnoreCase("chrome")) {
-            ChromeOptions options = new ChromeOptions();
-            driver = new ChromeDriver(options);
-        } else if (browser.equalsIgnoreCase("edge")) {
-            EdgeOptions options = new EdgeOptions();
-            driver = new EdgeDriver(options);
-        } else {
-            throw new IllegalArgumentException("Unsupported browser: " + browser);
+        if (driver == null) {
+            String browser = System.getProperty("browser", "chrome");
+            if (browser.equalsIgnoreCase("chrome")) {
+                ChromeOptions options = new ChromeOptions();
+                driver = new ChromeDriver(options);
+            } else if (browser.equalsIgnoreCase("edge")) {
+                EdgeOptions options = new EdgeOptions();
+                driver = new EdgeDriver(options);
+            } else {
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
+            }
         }
     }
     @AfterEach
@@ -93,16 +94,13 @@ public class TestLogin {
 
         Helper.clickButtonByLocator(driver,LOGIN_BUTTON_LOCATOR,CLICK_LOGIN_BUTTON_MESSAGE);
 
-        String expected_url = driver.getCurrentUrl();
-        wait.until(
-                d -> {
-                    Helper.logger.info("Redirect to inventory page");
-                    assertThat(expected_url, is("https://www.saucedemo.com/inventory.html"));
-                    Helper.logger.info("Expected title Swag Labs");
-                    assertThat(driver.getTitle(), containsString("Swag Labs"));
-                    return true;
-                });
+        Helper.waitForUrlAndTitle(wait,driver);
 
+        String currentUrl = driver.getCurrentUrl();
+        assertThat(currentUrl, is("https://www.saucedemo.com/inventory.html"));
+
+        String pageTitle = driver.getTitle();
+        assertThat(pageTitle, containsString("Swag Labs"));
     }
 
     private void fillLoginAndPassword(WebDriver driver, String username, String password){
