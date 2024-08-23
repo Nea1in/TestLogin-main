@@ -105,7 +105,7 @@ public class Helper {
             Helper.logger.info("Redirect to inventory page, current URL: " + expectedUrl);
             return true;
         } catch (TimeoutException e) {
-            Helper.logger.info("URL not change.");
+            Helper.logger.info("URL not correct.");
             return false;
         }
     }
@@ -115,7 +115,7 @@ public class Helper {
             Helper.logger.info("Expected title Swag Labs, current title: " + expectedTitle);
             return true;
         } catch (TimeoutException e) {
-            Helper.logger.info("Title not change.");
+            Helper.logger.info("Title not correct.");
             return false;
         }
     }
