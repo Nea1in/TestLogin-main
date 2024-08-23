@@ -94,13 +94,12 @@ public class TestLogin {
 
         Helper.clickButtonByLocator(driver,LOGIN_BUTTON_LOCATOR,CLICK_LOGIN_BUTTON_MESSAGE);
 
-        Helper.waitForUrlAndTitle(wait,driver);
+        assertThat("URL not change.",
+                Helper.waitForUrlChange(wait,"https://www.saucedemo.com/inventory.html"), is(true));
+        assertThat("not correct title.",
+                Helper.waitForTitleChange(wait,"Swag Labs"), is(true));
 
-        String currentUrl = driver.getCurrentUrl();
-        assertThat(currentUrl, is("https://www.saucedemo.com/inventory.html"));
 
-        String pageTitle = driver.getTitle();
-        assertThat(pageTitle, containsString("Swag Labs"));
     }
 
     private void fillLoginAndPassword(WebDriver driver, String username, String password){

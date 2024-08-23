@@ -1,6 +1,7 @@
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
@@ -97,13 +98,25 @@ public class Helper {
         return errorMessageText;
     }
 
-    public static void waitForUrlAndTitle(WebDriverWait wait, WebDriver driver) {
-        wait.until(d -> {
-            String currentUrl = driver.getCurrentUrl();
-            Helper.logger.info("Redirect to inventory page, current URL: " + currentUrl);
-            String pageTitle = driver.getTitle();
-            Helper.logger.info("Expected title Swag Labs, current title: " + pageTitle);
+
+    public static boolean waitForUrlChange(WebDriverWait wait, String expectedUrl) {
+        try {
+            wait.until(ExpectedConditions.urlToBe(expectedUrl));
+            Helper.logger.info("Redirect to inventory page, current URL: " + expectedUrl);
             return true;
-        });
+        } catch (TimeoutException e) {
+            Helper.logger.info("URL not change.");
+            return false;
+        }
+    }
+    public static boolean waitForTitleChange(WebDriverWait wait, String expectedTitle) {
+        try {
+            wait.until(ExpectedConditions.titleIs(expectedTitle));
+            Helper.logger.info("Expected title Swag Labs, current title: " + expectedTitle);
+            return true;
+        } catch (TimeoutException e) {
+            Helper.logger.info("Title not change.");
+            return false;
+        }
     }
 }
